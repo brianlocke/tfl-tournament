@@ -4,6 +4,12 @@ import { NextResponse, type NextRequest } from "next/server";
 const PUBLIC_PATHS = ["/login", "/register", "/t/", "/match/"];
 
 export async function proxy(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+  const isPublic = PUBLIC_PATHS.some((p) => pathname.startsWith(p));
+
+  // Skip auth entirely for public paths
+  if (isPublic) return NextResponse.next({ request });
+
   let supabaseResponse = NextResponse.next({ request });
 
   const supabase = createServerClient(
@@ -31,10 +37,7 @@ export async function proxy(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const { pathname } = request.nextUrl;
-  const isPublic = PUBLIC_PATHS.some((p) => pathname.startsWith(p));
-
-  if (!user && !isPublic) {
+  if (!user) {
     const loginUrl = request.nextUrl.clone();
     loginUrl.pathname = "/login";
     return NextResponse.redirect(loginUrl);
