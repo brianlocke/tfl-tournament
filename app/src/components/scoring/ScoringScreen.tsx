@@ -225,6 +225,13 @@ export default function ScoringScreen({ config }: { config: MatchConfig }) {
   const interruptSeconds = interrupt ? Math.max(0, Math.ceil((interrupt.expiresAt - now) / 1000)) : 0;
   const playerName = (p: Player) => (p === "p1" ? config.p1Name : config.p2Name);
 
+  const justScoredTD = (p: Player) => {
+    const last = lastEventByPlayer(p);
+    return !!last &&
+      (last.type === "touchdown" || last.type === "super_touchdown") &&
+      now - last.ts < 30_000;
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-black text-white">
       {/* Header */}
@@ -262,7 +269,7 @@ export default function ScoringScreen({ config }: { config: MatchConfig }) {
       <PlayerPanel
         player="p2" team="blue" name={config.p2Name}
         score={scores.p2} armed={armed.p2} hand={hands.p2}
-        lastEvent={lastEventByPlayer("p2")}
+        justScoredTD={justScoredTD("p2")}
         onScore={score} onTapCard={tapCard}
         onDraw={() => { if (!winner && hands.p2.length < 3) setPicker({ player: "p2" }); }}
         onRemoveCard={(i) => removeCard("p2", i)}
@@ -291,7 +298,7 @@ export default function ScoringScreen({ config }: { config: MatchConfig }) {
       <PlayerPanel
         player="p1" team="red" name={config.p1Name}
         score={scores.p1} armed={armed.p1} hand={hands.p1}
-        lastEvent={lastEventByPlayer("p1")}
+        justScoredTD={justScoredTD("p1")}
         onScore={score} onTapCard={tapCard}
         onDraw={() => { if (!winner && hands.p1.length < 3) setPicker({ player: "p1" }); }}
         onRemoveCard={(i) => removeCard("p1", i)}
@@ -332,12 +339,12 @@ const TEAM_COLORS = {
 };
 
 function PlayerPanel({
-  player, team, name, score, armed, hand, lastEvent,
+  player, team, name, score, armed, hand, justScoredTD,
   onScore, onTapCard, onDraw, onRemoveCard,
   interrupt, interruptSeconds, onActivateInterrupt, winner, flipped = false,
 }: {
   player: Player; team: Team; name: string; score: number;
-  armed: CardKey | null; hand: CardKey[]; lastEvent: ScoringEvent | undefined;
+  armed: CardKey | null; hand: CardKey[]; justScoredTD: boolean;
   onScore: (p: Player, t: "touchdown" | "extra_point" | "field_goal") => void;
   onTapCard: (p: Player, k: CardKey) => void;
   onDraw: () => void; onRemoveCard: (i: number) => void;
@@ -346,9 +353,6 @@ function PlayerPanel({
 }) {
   const c = TEAM_COLORS[team];
   const isLoser = winner && winner !== player;
-  const justScoredTD = lastEvent &&
-    (lastEvent.type === "touchdown" || lastEvent.type === "super_touchdown") &&
-    now - lastEvent.ts < 30_000;
 
   const tdLabel = armed === "super_td" ? "SUPER TD" : "TD";
   const tdPoints = armed === "super_td" ? 10 : 6;
