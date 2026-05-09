@@ -6,3 +6,4 @@ package.json
 # Allow app/ package files
 !app/package.json
 !app/package-lock.json
+.vercel
