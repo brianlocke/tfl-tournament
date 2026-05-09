@@ -1,36 +1,36 @@
-# 🏈 TFL Tournament App — Project Memory
+# TFL Tournament
 
-Table Football League (TFL) is the modern tabletop flick-football game.
-This folder is the living memory for the app build. Update files as decisions evolve.
+Next.js app for running and playing Table Football League tournaments.
 
-## Files
+## Local Development
 
-| File | Contents |
-|---|---|
-| `01-game-rules.md` | Official TFL game rules — gameplay flow |
-| `02-product-plan.md` | What we're building, who it's for, core decisions |
-| `03-tech-stack.md` | Stack choices and rationale |
-| `04-database-schema.md` | Full Supabase schema |
-| `05-screens-and-flows.md` | All app screens and user flows |
-| `06-scoring-logic.md` | Scoring events, card modifiers, real-time sync |
-| `07-action-cards.md` | Full action card catalog (effects + scoring impact) |
-| `08-bracket-logic.md` | Double elimination bracket rules and auto-advance |
-| `09-build-phases.md` | Phased build order and status |
-| `10-card-tracking.md` | How players tell the app what's in their hand |
+```bash
+npm install
+npm run dev
+```
 
-## Status
+Open http://localhost:3000.
 
-- [x] Game rules captured
-- [x] Action cards cataloged (full set from master print PDF)
-- [x] Scoring options finalized — including card modifiers
-- [x] Product plan defined
-- [x] Tech stack chosen
-- [x] Database schema drafted
-- [x] Manager UI mockup built (interactive React)
-- [ ] Player UI mockup
-- [ ] Live scoring screen (in-game)
-- [ ] Build started (Supabase + frontend)
+## Project Layout
 
-## How to Use
+- `src/` - Next.js app routes, components, and library code
+- `public/` - static assets
+- `supabase/` - local Supabase config and migrations
+- `docs/` - product plans, rules, schema notes, and mockups
 
-When resuming work, share these files with Claude in a new chat to restore full context. Update the relevant file(s) before starting any new build phase.
+## Deploying
+
+This repo is now structured as a standard Next.js project at the repository root.
+
+In Vercel, set:
+
+- Framework Preset: Next.js
+- Root Directory: blank
+- Build Command: `npm run build`
+- Install Command: `npm install`
+- Output Directory: blank
+
+Required environment variables:
+
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`

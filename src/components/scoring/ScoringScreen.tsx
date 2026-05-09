@@ -88,7 +88,6 @@ export default function ScoringScreen({ config }: { config: MatchConfig }) {
   const [scores, setScores] = useState<Record<Player, number>>({ p1: 0, p2: 0 });
   const [armed, setArmed] = useState<Record<Player, CardKey | null>>({ p1: null, p2: null });
   const [hands, setHands] = useState<Record<Player, CardKey[]>>({ p1: [], p2: [] });
-  const [usedCards, setUsedCards] = useState<Record<Player, CardKey[]>>({ p1: [], p2: [] });
   const [events, setEvents] = useState<ScoringEvent[]>([]);
   const [interrupt, setInterrupt] = useState<InterruptState | null>(null);
   const [undoable, setUndoable] = useState<UndoState | null>(null);
@@ -98,14 +97,18 @@ export default function ScoringScreen({ config }: { config: MatchConfig }) {
   const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
-    const t = setInterval(() => setNow(Date.now()), 250);
+    const t = setInterval(() => {
+      const currentTime = Date.now();
+      setNow(currentTime);
+      setInterrupt((current) =>
+        current && currentTime > current.expiresAt ? null : current
+      );
+      setUndoable((current) =>
+        current && currentTime > current.expiresAt ? null : current
+      );
+    }, 250);
     return () => clearInterval(t);
   }, []);
-
-  useEffect(() => {
-    if (interrupt && now > interrupt.expiresAt) setInterrupt(null);
-    if (undoable && now > undoable.expiresAt) setUndoable(null);
-  }, [now, interrupt, undoable]);
 
   const opponent = (p: Player): Player => (p === "p1" ? "p2" : "p1");
 
@@ -133,7 +136,6 @@ export default function ScoringScreen({ config }: { config: MatchConfig }) {
     if (!cardKey) return;
     setArmed((a) => ({ ...a, [player]: null }));
     setHands((h) => ({ ...h, [player]: h[player].filter((c) => c !== cardKey) }));
-    setUsedCards((u) => ({ ...u, [player]: [...u[player], cardKey] }));
   }
 
   function score(player: Player, baseType: "touchdown" | "extra_point" | "field_goal") {
@@ -196,7 +198,6 @@ export default function ScoringScreen({ config }: { config: MatchConfig }) {
       ts: Date.now(),
     }, ...es]);
     setHands((h) => ({ ...h, [interrupt.defender]: h[interrupt.defender].filter((c) => c !== cardKey) }));
-    setUsedCards((u) => ({ ...u, [interrupt.defender]: [...u[interrupt.defender], cardKey] }));
     setInterrupt(null);
     setUndoable(null);
   }
@@ -212,7 +213,6 @@ export default function ScoringScreen({ config }: { config: MatchConfig }) {
     setScores({ p1: 0, p2: 0 });
     setArmed({ p1: null, p2: null });
     setHands({ p1: [], p2: [] });
-    setUsedCards({ p1: [], p2: [] });
     setEvents([]);
     setInterrupt(null);
     setUndoable(null);
@@ -310,7 +310,7 @@ export default function ScoringScreen({ config }: { config: MatchConfig }) {
 
       {showLog && <EventLog events={events} playerName={playerName} onClose={() => setShowLog(false)} />}
       {picker && <CardPicker player={picker.player} name={playerName(picker.player)} onPick={(k) => { setHands((h) => ({ ...h, [picker.player]: [...h[picker.player], k] })); setPicker(null); }} onCancel={() => setPicker(null)} />}
-      {winner && <WinModal winner={winner} name={playerName(winner)} team={winner === "p1" ? "red" : "blue"} score={scores[winner]} oppScore={scores[opponent(winner)]} onConfirm={reset} />}
+      {winner && <WinModal name={playerName(winner)} team={winner === "p1" ? "red" : "blue"} score={scores[winner]} oppScore={scores[opponent(winner)]} onConfirm={reset} />}
     </div>
   );
 }
@@ -572,8 +572,8 @@ function CardPicker({ player, name, onPick, onCancel }: {
 
 // ─── Win Modal ────────────────────────────────────────────────────────────────
 
-function WinModal({ winner, name, team, score, oppScore, onConfirm }: {
-  winner: Player; name: string; team: Team; score: number; oppScore: number; onConfirm: () => void;
+function WinModal({ name, team, score, oppScore, onConfirm }: {
+  name: string; team: Team; score: number; oppScore: number; onConfirm: () => void;
 }) {
   const accent = team === "red" ? "led-red" : "led-blue";
   const bg = team === "red" ? "from-red-950" : "from-blue-950";
