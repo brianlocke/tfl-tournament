@@ -2,3 +2,7 @@ node_modules/
 package-lock.json
 package.json
 .DS_Store
+
+# Allow app/ package files
+!app/package.json
+!app/package-lock.json
