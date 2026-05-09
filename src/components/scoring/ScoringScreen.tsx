@@ -233,34 +233,34 @@ export default function ScoringScreen({ config }: { config: MatchConfig }) {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-black text-white">
+    <div className="h-dvh flex flex-col bg-black text-white overflow-hidden">
       {/* Header */}
-      <header className="px-4 py-2.5 border-b border-white/10 bg-black flex items-center justify-between">
-        <div className="flex items-center gap-3 min-w-0">
-          <div className="w-7 h-7 rounded bg-brand-red flex items-center justify-center flex-shrink-0">
-            <span className="font-display text-sm">T</span>
+      <header className="px-3 py-1.5 sm:px-4 sm:py-2.5 border-b border-white/10 bg-black flex items-center justify-between flex-shrink-0">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          <div className="w-6 h-6 sm:w-7 sm:h-7 rounded bg-brand-red flex items-center justify-center flex-shrink-0">
+            <span className="font-display text-xs sm:text-sm">T</span>
           </div>
           <div className="min-w-0">
-            <div className="text-xs font-display tracking-wider truncate">
+            <div className="text-[10px] sm:text-xs font-display tracking-wider truncate">
               {config.tournamentName} · {config.round}
             </div>
             <div className="flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 live-dot" />
-              <span className="text-[10px] text-emerald-300 font-bold tracking-wider">LIVE · SYNCED</span>
+              <span className="text-[9px] sm:text-[10px] text-emerald-300 font-bold tracking-wider">LIVE · SYNCED</span>
             </div>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2">
           {undoable && (
-            <button onClick={undo} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-bold hover:bg-amber-500/30">
-              <Undo2 className="w-3 h-3" /> UNDO {undoSeconds}s
+            <button onClick={undo} className="flex items-center gap-1 px-2 py-1 sm:px-2.5 sm:py-1.5 rounded bg-amber-500/20 border border-amber-500/40 text-amber-300 text-[10px] sm:text-xs font-bold hover:bg-amber-500/30">
+              <Undo2 className="w-2.5 h-2.5 sm:w-3 sm:h-3" /> UNDO {undoSeconds}s
             </button>
           )}
-          <button onClick={() => setShowLog(!showLog)} className="w-8 h-8 rounded bg-white/5 hover:bg-white/10 flex items-center justify-center">
-            <Activity className="w-4 h-4" />
+          <button onClick={() => setShowLog(!showLog)} className="w-7 h-7 sm:w-8 sm:h-8 rounded bg-white/5 hover:bg-white/10 flex items-center justify-center">
+            <Activity className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
-          <button onClick={reset} className="w-8 h-8 rounded bg-white/5 hover:bg-white/10 flex items-center justify-center">
-            <X className="w-4 h-4" />
+          <button onClick={reset} className="w-7 h-7 sm:w-8 sm:h-8 rounded bg-white/5 hover:bg-white/10 flex items-center justify-center">
+            <X className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
         </div>
       </header>
@@ -280,14 +280,14 @@ export default function ScoringScreen({ config }: { config: MatchConfig }) {
       />
 
       {/* Progress bars */}
-      <div className="bg-black px-4 py-2.5 border-y border-white/10">
+      <div className="bg-black px-3 sm:px-4 py-1.5 sm:py-2.5 border-y border-white/10 flex-shrink-0">
         <div className="flex items-center gap-2">
-          <div className="flex-1 h-2 bg-white/5 rounded-full relative overflow-hidden">
+          <div className="flex-1 h-1.5 sm:h-2 bg-white/5 rounded-full relative overflow-hidden">
             <div className="absolute inset-y-0 left-0 bg-gradient-to-r from-red-700 to-red-500 transition-all"
               style={{ width: `${Math.min(100, (scores.p1 / WIN_THRESHOLD) * 100)}%` }} />
           </div>
           <span className="w-1.5 h-1.5 rounded-full bg-white/30 flex-shrink-0" />
-          <div className="flex-1 h-2 bg-white/5 rounded-full relative overflow-hidden">
+          <div className="flex-1 h-1.5 sm:h-2 bg-white/5 rounded-full relative overflow-hidden">
             <div className="absolute inset-y-0 right-0 bg-gradient-to-l from-blue-700 to-blue-500 transition-all"
               style={{ width: `${Math.min(100, (scores.p2 / WIN_THRESHOLD) * 100)}%` }} />
           </div>
@@ -362,14 +362,14 @@ function PlayerPanel({
   const xpPoints = armed === "extra_points" ? 3 : 1;
 
   return (
-    <section className={`relative flex-1 bg-gradient-to-b ${c.bg} field-bg px-4 py-4 ${isLoser ? "opacity-50" : ""} ${flipped ? "rotate-180" : ""}`}>
-      <div className="flex items-start justify-between mb-2">
+    <section className={`relative flex-1 min-h-0 bg-gradient-to-b ${c.bg} field-bg px-3 sm:px-4 py-2 sm:py-3 ${isLoser ? "opacity-50" : ""} ${flipped ? "rotate-180" : ""}`}>
+      <div className="flex items-start justify-between mb-1 sm:mb-2">
         <div>
-          <div className={`text-[10px] font-bold tracking-[0.2em] ${c.accent} mb-0.5`}>{team.toUpperCase()} TEAM</div>
-          <div className="font-display text-2xl tracking-wide truncate">{name}</div>
+          <div className={`text-[9px] sm:text-[10px] font-bold tracking-[0.2em] ${c.accent} mb-0.5`}>{team.toUpperCase()} TEAM</div>
+          <div className="font-display text-lg sm:text-2xl tracking-wide truncate">{name}</div>
         </div>
         <div className="text-right">
-          <div key={score} className={`font-scoreboard font-black text-7xl leading-none ${c.led} score-pop tabular-nums`}>
+          <div key={score} className={`font-scoreboard font-black text-5xl sm:text-6xl leading-none ${c.led} score-pop tabular-nums`}>
             {score.toString().padStart(2, "0")}
           </div>
           {winner === player && (
@@ -383,37 +383,37 @@ function PlayerPanel({
 
       {interrupt && (
         <button onClick={onActivateInterrupt}
-          className="w-full mb-2.5 rounded-lg bg-gradient-to-r from-red-600 to-red-700 border-2 border-red-400 px-3 py-2.5 flex items-center justify-between interrupt-pulse slide-in">
+          className="w-full mb-1.5 sm:mb-2.5 rounded-lg bg-gradient-to-r from-red-600 to-red-700 border-2 border-red-400 px-2.5 py-1.5 sm:px-3 sm:py-2.5 flex items-center justify-between interrupt-pulse slide-in">
           <div className="flex items-center gap-2">
-            <AlertTriangle className="w-5 h-5" />
+            <AlertTriangle className="w-4 h-4 sm:w-5 sm:h-5" />
             <div className="text-left">
-              <div className="font-display text-sm tracking-wider">{interrupt.eventType === "td" ? "PICK SIX!" : "BLOCK FG!"}</div>
-              <div className="text-[10px] opacity-80">Negate opponent&apos;s {interrupt.eventType === "td" ? "TD" : "FG"}</div>
+              <div className="font-display text-xs sm:text-sm tracking-wider">{interrupt.eventType === "td" ? "PICK SIX!" : "BLOCK FG!"}</div>
+              <div className="text-[9px] sm:text-[10px] opacity-80">Negate opponent&apos;s {interrupt.eventType === "td" ? "TD" : "FG"}</div>
             </div>
           </div>
           <div className="font-scoreboard text-xs bg-black/40 px-2 py-1 rounded">{interruptSeconds}s</div>
         </button>
       )}
 
-      <div className="grid grid-cols-3 gap-2 mb-3">
+      <div className="grid grid-cols-3 gap-1.5 sm:gap-2 mb-2 sm:mb-3">
         <ScoreButton label={tdLabel} points={tdPoints} armed={armed === "super_td"} color={c.btnPrimary} onClick={() => onScore(player, "touchdown")} disabled={!!winner} />
         <ScoreButton label={xpLabel} points={xpPoints} armed={armed === "extra_points"} color={justScoredTD ? c.btnGhost : "bg-white/5 border-white/10"} onClick={() => onScore(player, "extra_point")} disabled={!justScoredTD || !!winner} subtle={!justScoredTD} />
         <ScoreButton label={fgLabel} points={fgPoints} armed={armed === "super_fg" || armed === "fg_card"} color={c.btnPrimary} onClick={() => onScore(player, "field_goal")} disabled={!!winner} />
       </div>
 
-      <div className="flex items-center justify-between mb-1.5">
-        <span className="text-[10px] uppercase tracking-[0.2em] text-slate-500">Action Cards · {hand.length}/3</span>
-        {armed && <span className="text-[10px] uppercase tracking-[0.15em] text-amber-400 font-bold">⚡ ARMED</span>}
+      <div className="flex items-center justify-between mb-1">
+        <span className="text-[9px] sm:text-[10px] uppercase tracking-[0.2em] text-slate-500">Action Cards · {hand.length}/3</span>
+        {armed && <span className="text-[9px] sm:text-[10px] uppercase tracking-[0.15em] text-amber-400 font-bold">⚡ ARMED</span>}
       </div>
-      <div className="grid grid-cols-3 gap-1.5">
+      <div className="grid grid-cols-3 gap-1 sm:gap-1.5">
         {hand.map((cardKey, i) => (
           <ActionCard key={`${cardKey}-${i}`} cardKey={cardKey} armed={armed === cardKey} onTap={() => onTapCard(player, cardKey)} onRemove={() => onRemoveCard(i)} disabled={!!winner} />
         ))}
         {Array.from({ length: 3 - hand.length }).map((_, i) => (
           <button key={`draw-${i}`} onClick={onDraw} disabled={!!winner}
-            className={`aspect-[4/5] rounded border-2 border-dashed ${c.drawBorder} flex flex-col items-center justify-center transition-all active:scale-95 disabled:opacity-30`}>
-            <ChevronUp className="w-4 h-4 text-slate-400 mb-0.5" />
-            <span className="font-display text-[11px] tracking-wider text-slate-300">DRAW</span>
+            className={`aspect-[3/4] sm:aspect-[4/5] rounded border-2 border-dashed ${c.drawBorder} flex flex-col items-center justify-center transition-all active:scale-95 disabled:opacity-30`}>
+            <ChevronUp className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-400 mb-0.5" />
+            <span className="font-display text-[10px] tracking-wider text-slate-300">DRAW</span>
           </button>
         ))}
       </div>
@@ -429,9 +429,9 @@ function ScoreButton({ label, points, armed, color, onClick, disabled, subtle }:
 }) {
   return (
     <button onClick={onClick} disabled={disabled}
-      className={`relative rounded-lg border-2 ${color} py-3 px-2 transition-all disabled:opacity-40 disabled:cursor-not-allowed active:scale-[0.97] ${armed ? "ring-2 ring-amber-400 ring-offset-2 ring-offset-black" : ""}`}>
-      <div className={`font-display text-base tracking-wider leading-none ${subtle ? "text-slate-500" : ""}`}>{label}</div>
-      <div className={`font-scoreboard font-black text-xl mt-0.5 ${armed ? "text-amber-300" : subtle ? "text-slate-600" : ""}`}>+{points}</div>
+      className={`relative rounded-lg border-2 ${color} py-2 px-1.5 sm:py-3 sm:px-2 transition-all disabled:opacity-40 disabled:cursor-not-allowed active:scale-[0.97] ${armed ? "ring-2 ring-amber-400 ring-offset-1 ring-offset-black sm:ring-offset-2" : ""}`}>
+      <div className={`font-display text-xs sm:text-sm tracking-wider leading-none ${subtle ? "text-slate-500" : ""}`}>{label}</div>
+      <div className={`font-scoreboard font-black text-base sm:text-xl mt-0.5 ${armed ? "text-amber-300" : subtle ? "text-slate-600" : ""}`}>+{points}</div>
     </button>
   );
 }
@@ -454,16 +454,16 @@ function ActionCard({ cardKey, armed, onTap, onRemove, disabled }: {
   return (
     <div className="relative">
       <button onClick={onTap} disabled={disabled || (!card.armable && !card.interrupt)}
-        className={`w-full aspect-[4/5] rounded ${c.bg} border ${c.border} overflow-hidden text-left transition-all active:scale-95 disabled:opacity-40 ${armed ? "glow-armed scale-[1.04]" : ""} ${!card.armable ? "opacity-70" : ""}`}>
-        <div className={`text-[8px] font-bold tracking-[0.15em] px-1.5 py-0.5 ${c.tag} flex items-center gap-1`}>
-          <Icon className="w-2 h-2" /> {card.type}
+        className={`w-full aspect-[3/4] sm:aspect-[4/5] rounded ${c.bg} border ${c.border} overflow-hidden text-left transition-all active:scale-95 disabled:opacity-40 ${armed ? "glow-armed scale-[1.04]" : ""} ${!card.armable ? "opacity-70" : ""}`}>
+        <div className={`text-[7px] sm:text-[8px] font-bold tracking-[0.15em] px-1 sm:px-1.5 py-0.5 ${c.tag} flex items-center gap-0.5`}>
+          <Icon className="w-1.5 h-1.5 sm:w-2 sm:h-2" /> {card.type}
         </div>
-        <div className="px-1.5 pt-1">
-          <div className="font-display text-[11px] leading-tight">{card.name}</div>
-          <div className="text-[8px] text-white/60 mt-0.5 leading-tight">{card.desc}</div>
+        <div className="px-1 sm:px-1.5 pt-0.5 sm:pt-1">
+          <div className="font-display text-[9px] sm:text-[11px] leading-tight">{card.name}</div>
+          <div className="text-[7px] sm:text-[8px] text-white/60 mt-0.5 leading-tight">{card.desc}</div>
         </div>
         {!card.armable && !card.interrupt && (
-          <div className="absolute bottom-0.5 right-1 text-[7px] text-white/40 italic">physical</div>
+          <div className="absolute bottom-0.5 right-1 text-[6px] sm:text-[7px] text-white/40 italic">physical</div>
         )}
       </button>
       {!disabled && (
