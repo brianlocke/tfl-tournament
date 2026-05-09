@@ -95,7 +95,7 @@ export default function ScoringScreen({ config }: { config: MatchConfig }) {
   const [winner, setWinner] = useState<Player | null>(null);
   const [showLog, setShowLog] = useState(false);
   const [picker, setPicker] = useState<{ player: Player } | null>(null);
-  const [now, setNow] = useState(Date.now());
+  const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
     const t = setInterval(() => setNow(Date.now()), 250);
@@ -348,7 +348,7 @@ function PlayerPanel({
   const isLoser = winner && winner !== player;
   const justScoredTD = lastEvent &&
     (lastEvent.type === "touchdown" || lastEvent.type === "super_touchdown") &&
-    Date.now() - lastEvent.ts < 30_000;
+    now - lastEvent.ts < 30_000;
 
   const tdLabel = armed === "super_td" ? "SUPER TD" : "TD";
   const tdPoints = armed === "super_td" ? 10 : 6;
