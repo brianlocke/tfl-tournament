@@ -55,28 +55,28 @@ export default function SimpleScoring({
         </button>
       </header>
 
-      {/* P2 — top half, rotated so they can read it from across the table */}
-      <HalfPanel
-        name={name("p2")}
-        score={scores.p2}
-        isWinner={winner === "p2"}
-        color="blue"
-        flipped
-        onAdd={() => add("p2")}
-        onSub={() => sub("p2")}
-      />
+      {/* Side-by-side panels */}
+      <div className="flex flex-row flex-1 min-h-0">
+        <HalfPanel
+          name={name("p1")}
+          score={scores.p1}
+          isWinner={winner === "p1"}
+          color="red"
+          onAdd={() => add("p1")}
+          onSub={() => sub("p1")}
+        />
 
-      <div className="flex-shrink-0 h-px bg-white/10" />
+        <div className="flex-shrink-0 w-px bg-white/10" />
 
-      {/* P1 — bottom half */}
-      <HalfPanel
-        name={name("p1")}
-        score={scores.p1}
-        isWinner={winner === "p1"}
-        color="red"
-        onAdd={() => add("p1")}
-        onSub={() => sub("p1")}
-      />
+        <HalfPanel
+          name={name("p2")}
+          score={scores.p2}
+          isWinner={winner === "p2"}
+          color="blue"
+          onAdd={() => add("p2")}
+          onSub={() => sub("p2")}
+        />
+      </div>
 
       {winner && (
         <WinOverlay
@@ -96,7 +96,6 @@ function HalfPanel({
   score,
   isWinner,
   color,
-  flipped = false,
   onAdd,
   onSub,
 }: {
@@ -104,7 +103,6 @@ function HalfPanel({
   score: number;
   isWinner: boolean;
   color: "red" | "blue";
-  flipped?: boolean;
   onAdd: () => void;
   onSub: () => void;
 }) {
@@ -126,13 +124,11 @@ function HalfPanel({
   }[color];
 
   return (
-    <section
-      className={`relative flex-1 min-h-0 bg-gradient-to-b ${cfg.bg} ${flipped ? "rotate-180" : ""}`}
-    >
-      {/* Full-area tap target for +1 */}
+    <section className={`relative flex-1 min-w-0 bg-gradient-to-b ${cfg.bg}`}>
+      {/* Full-area tap target */}
       <button
         onClick={onAdd}
-        className={`absolute inset-0 w-full h-full flex flex-col items-center justify-center gap-2 transition-colors ${cfg.activeOverlay}`}
+        className={`absolute inset-0 w-full h-full flex flex-col items-center justify-center gap-3 transition-colors ${cfg.activeOverlay}`}
       >
         <span
           className={`text-[11px] font-bold tracking-[0.25em] uppercase px-3 py-1 rounded-full ${cfg.nameBg} text-white`}
@@ -141,7 +137,7 @@ function HalfPanel({
         </span>
         <span
           className={`font-scoreboard font-black leading-none tabular-nums ${cfg.scoreColor} ${isWinner ? "animate-pulse" : ""}`}
-          style={{ fontSize: "clamp(72px, 28vw, 160px)" }}
+          style={{ fontSize: "clamp(72px, 20vw, 140px)" }}
         >
           {String(score).padStart(2, "0")}
         </span>
@@ -152,13 +148,13 @@ function HalfPanel({
         )}
       </button>
 
-      {/* Minus button — bottom-right from this player's perspective */}
+      {/* Minus button — bottom center */}
       <button
         onClick={(e) => {
           e.stopPropagation();
           onSub();
         }}
-        className={`absolute bottom-4 right-4 w-12 h-12 rounded-full border ${cfg.minus} flex items-center justify-center text-2xl font-bold leading-none transition-all active:scale-90 z-10`}
+        className={`absolute bottom-6 left-1/2 -translate-x-1/2 w-12 h-12 rounded-full border ${cfg.minus} flex items-center justify-center text-2xl font-bold leading-none transition-all active:scale-90 z-10`}
       >
         −
       </button>
