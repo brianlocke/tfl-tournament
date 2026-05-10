@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import {
   Undo2, X, Trophy, Zap, Shield, Flame,
-  AlertTriangle, ChevronUp, Activity, QrCode,
+  AlertTriangle, ChevronUp, Activity, QrCode, Minimize2,
 } from "lucide-react";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -59,6 +59,7 @@ export interface MatchConfig {
   round: string;
   p1Name: string;
   p2Name: string;
+  onSwitchToSimple?: () => void;
 }
 
 // ─── Constants ───────────────────────────────────────────────────────────────
@@ -254,6 +255,11 @@ export default function ScoringScreen({ config }: { config: MatchConfig }) {
           {undoable && (
             <button onClick={undo} className="flex items-center gap-1 px-2 py-1 sm:px-2.5 sm:py-1.5 rounded bg-amber-500/20 border border-amber-500/40 text-amber-300 text-[10px] sm:text-xs font-bold hover:bg-amber-500/30">
               <Undo2 className="w-2.5 h-2.5 sm:w-3 sm:h-3" /> UNDO {undoSeconds}s
+            </button>
+          )}
+          {config.onSwitchToSimple && (
+            <button onClick={config.onSwitchToSimple} className="flex items-center gap-1 px-2 py-1 sm:px-2.5 sm:py-1.5 rounded bg-white/5 hover:bg-white/10 text-[10px] sm:text-xs text-slate-300 tracking-wider uppercase">
+              <Minimize2 className="w-2.5 h-2.5 sm:w-3 sm:h-3" /> Simple
             </button>
           )}
           <button onClick={() => setShowLog(!showLog)} className="w-7 h-7 sm:w-8 sm:h-8 rounded bg-white/5 hover:bg-white/10 flex items-center justify-center">

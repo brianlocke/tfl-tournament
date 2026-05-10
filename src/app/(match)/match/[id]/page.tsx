@@ -1,6 +1,10 @@
-import ScoringScreen from "@/components/scoring/ScoringScreen";
+"use client";
 
-const DEMO_CONFIG = {
+import { useState } from "react";
+import ScoringScreen, { type MatchConfig } from "@/components/scoring/ScoringScreen";
+import SimpleScoring from "@/components/scoring/SimpleScoring";
+
+const DEMO_CONFIG: Omit<MatchConfig, "onSwitchToSimple"> = {
   tournamentName: "FRIDAY NIGHT FLICKS",
   round: "WINNERS R2",
   p1Name: "Marcus T.",
@@ -8,5 +12,17 @@ const DEMO_CONFIG = {
 };
 
 export default function MatchScoringPage() {
-  return <ScoringScreen config={DEMO_CONFIG} />;
+  const [mode, setMode] = useState<"simple" | "full">("simple");
+
+  if (mode === "full") {
+    return (
+      <ScoringScreen
+        config={{ ...DEMO_CONFIG, onSwitchToSimple: () => setMode("simple") }}
+      />
+    );
+  }
+
+  return (
+    <SimpleScoring config={DEMO_CONFIG} onSwitchToFull={() => setMode("full")} />
+  );
 }
